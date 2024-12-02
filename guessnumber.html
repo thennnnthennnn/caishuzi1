@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>猜数字游戏</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f7f7f7;
+            margin: 0;
+        }
+
+        .game-container {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 80px;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+        }
+
+        p {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .hint {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .result {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <h1>猜数字游戏</h1>
+        <p>请输入一个数字（1 - 100）</p>
+        <input type="number" id="guessInput" min="1" max="100" placeholder="1 - 100">
+        <button id="guessButton">猜测</button>
+        <p id="message"></p>
+        <p class="hint" id="hint"></p>
+    </div>
+
+    <script>
+        let targetNumber = Math.floor(Math.random() * 100) + 1; // 随机生成目标数字
+        let attempts = 0; // 猜测次数
+
+        const guessButton = document.getElementById('guessButton');
+        const guessInput = document.getElementById('guessInput');
+        const message = document.getElementById('message');
+        const hint = document.getElementById('hint');
+
+        guessButton.addEventListener('click', function() {
+            const userGuess = parseInt(guessInput.value);
+            attempts++;
+
+            if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+                message.textContent = '请输入有效的数字（1 - 100）。';
+                message.style.color = 'red';
+                return;
+            }
+
+            if (userGuess === targetNumber) {
+                message.textContent = `恭喜你！猜对了！你用了 ${attempts} 次猜对。`;
+                message.style.color = 'green';
+                hint.textContent = ''; // 清除提示
+                guessButton.disabled = true; // 禁用按钮
+            } else if (userGuess < targetNumber) {
+                message.textContent = '太小了！再试一次。';
+                message.style.color = 'orange';
+                hint.textContent = `提示：目标数字大于 ${userGuess}`;
+            } else {
+                message.textContent = '太大了！再试一次。';
+                message.style.color = 'orange';
+                hint.textContent = `提示：目标数字小于 ${userGuess}`;
+            }
+
+            guessInput.value = ''; // 清空输入框
+            guessInput.focus(); // 聚焦输入框
+        });
+    </script>
+
+</body>
+</html>
